@@ -10,14 +10,14 @@ import hu.agyklub.csokicraft.libpayto.objects.PaytoIbanData;
 public final class LibPayto{
 	public static AbstractPaytoData parseURI(URI uri){
 		switch(uri.getRawAuthority()){
-		case "bic":
-			return new PaytoBicData(uri);
-		case "iban":
-			return new PaytoIbanData(uri);
+			case "bic":
+				return new PaytoBicData(uri);
+			case "iban":
+				return new PaytoIbanData(uri);
 		}
 		throw new UnsupportedOperationException(String.format("Payment target type %s not supported yet!", uri.getRawAuthority()));
 	}
-	
+
 	public static void dispatchURI(URI uri){
 		AbstractPaytoData data=parseURI(uri);
 		if(data instanceof PaytoIbanData)
