@@ -28,14 +28,14 @@ public final class PaytoHandlerRegistry{
 	public void dispatch(PaytoIbanData data){
 		synchronized(ibanHandlers){
 			for(PaytoIbanHandler hndl:ibanHandlers)
-				hndl.onIbanData(data);
+				hndl.accept(data);
 		}
 	}
 
 	public void dispatch(PaytoBicData data){
 		synchronized(bicHandlers){
 			for(PaytoBicHandler hndl:bicHandlers)
-				hndl.onBicData(data);
+				hndl.accept(data);
 		}
 	}
 }
