@@ -15,4 +15,16 @@ public class PaytoBicData extends AbstractPaytoBicData{
 
         }else throw new NullPointerException("No URI path given!");
     }
+
+	@Override
+	public String toString(){
+		StringBuilder sb=new StringBuilder("payto://bic/");
+		sb.append(bic);
+		String query=super.toString();
+		if(query!=null&&!query.isEmpty()){
+			sb.append('?');
+			sb.append(query);
+		}
+		return sb.toString();
+	}
 }

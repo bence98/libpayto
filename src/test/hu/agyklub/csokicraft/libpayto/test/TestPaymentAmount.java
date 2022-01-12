@@ -1,4 +1,4 @@
-package hu.agyklub.csokicraft.libpayto;
+package hu.agyklub.csokicraft.libpayto.test;
 
 import hu.agyklub.csokicraft.libpayto.objects.PaymentAmount;
 

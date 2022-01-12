@@ -1,6 +1,7 @@
 package hu.agyklub.csokicraft.libpayto.objects;
 
 import java.net.URI;
+import java.net.URLEncoder;
 
 public abstract class AbstractPaytoData{
     public PaymentAmount amount;
@@ -35,4 +36,27 @@ public abstract class AbstractPaytoData{
             }
         }
     }
+
+	private void addPart(String str, String label, StringBuilder sb){
+		if(str!=null){
+			if(sb.length()>0)
+				sb.append('&');
+			sb.append(label);
+			sb.append(URLEncoder.encode(str));
+		}
+	}
+
+	@Override
+	public String toString(){
+		StringBuilder sb=new StringBuilder();
+		if(amount!=null){
+			sb.append("amount=");
+			sb.append(amount);
+		}
+		addPart(receiver_name, "receiver-name=", sb);
+		addPart(sender_name, "sender-name=", sb);
+		addPart(message, "message=", sb);
+		addPart(instruction, "instruction=", sb);
+		return sb.toString();
+	}
 }

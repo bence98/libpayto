@@ -5,7 +5,7 @@ import java.net.URI;
 class AbstractPaytoBicData extends AbstractPaytoData{
     public String bic;
 
-    public AbstractPaytoBicData(URI uri) {
+    public AbstractPaytoBicData(URI uri){
         super(uri);
     }
 }

@@ -20,4 +20,20 @@ public class PaytoIbanData extends AbstractPaytoBicData{
 
         }else throw new NullPointerException("No URI path given!");
     }
+
+	@Override
+	public String toString(){
+		StringBuilder sb=new StringBuilder("payto://iban/");
+		if(bic!=null){
+			sb.append(bic);
+			sb.append('/');
+		}
+		sb.append(iban);
+		String query=super.toString();
+		if(query!=null&&!query.isEmpty()){
+			sb.append('?');
+			sb.append(query);
+		}
+		return sb.toString();
+	}
 }
