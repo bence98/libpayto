@@ -4,8 +4,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import hu.agyklub.csokicraft.libpayto.LibPayto;
+import hu.agyklub.csokicraft.libpayto.PaytoHandlerRegistry;
 import hu.agyklub.csokicraft.libpayto.handlers.PaytoBicHandler;
-import hu.agyklub.csokicraft.libpayto.handlers.PaytoHandlerRegistry;
 import hu.agyklub.csokicraft.libpayto.handlers.PaytoIbanHandler;
 
 public class TestLibPayto{

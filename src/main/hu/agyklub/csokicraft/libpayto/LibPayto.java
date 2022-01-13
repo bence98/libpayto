@@ -2,7 +2,6 @@ package hu.agyklub.csokicraft.libpayto;
 
 import java.net.URI;
 
-import hu.agyklub.csokicraft.libpayto.handlers.PaytoHandlerRegistry;
 import hu.agyklub.csokicraft.libpayto.objects.AbstractPaytoData;
 import hu.agyklub.csokicraft.libpayto.objects.PaytoBicData;
 import hu.agyklub.csokicraft.libpayto.objects.PaytoIbanData;
@@ -25,6 +24,6 @@ public final class LibPayto{
 		else if(data instanceof PaytoBicData)
 			PaytoHandlerRegistry.INSTANCE.dispatch((PaytoBicData) data);
 		else // unreachable...
-			throw new IllegalStateException("Wrong data class returned from pareURI(), bug in lib?");
+			throw new IllegalStateException("Wrong data class returned from parseURI(), bug in lib?");
 	}
 }
