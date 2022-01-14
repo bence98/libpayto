@@ -4,15 +4,34 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+/**
+  * Payment data describing the amount of funds to be transferred.
+  * Stored as a currency code plus a fix-point value, with 8 decimal places after the point. 
+  */
 public class PaymentAmount{
+	/** Identifier of the currency to be used for the transaction.
+	  * May be an arbitrary {@link String}, but is most often 3 characters long.<br />
+	  *
+	  * "If a 3-letter {@link #currency} is used, it MUST be an ISO 4217
+	  * alphabetic code.  A payment target type MAY define semantics
+	  * beyond ISO 4217 for currency codes that are not 3 characters."
+	  * (from RFC 8905)<br />
+	  *
+	  * As per standard, the {@link #currency} is mandatory, but some nonstandard
+	  * implementations may leave it optional (<code>null</code>), in which case the default currency for
+	  * the user SHOULD be used.
+	  */
 	public String currency;
+	/** The units (whole) part of the amount. A non-negative integer less than <code>2^53</code> */
 	@Min(0)
 	@Max(9007199254740992L) // 2^53
 	public long units;
+	/** The fractions part of the amount, in micro-cents (1/10^8-ths). */
 	@Min(0)
 	@Max(99_999_999)
 	public int microcents;
 
+	/** Parse a {@link String} into {@link PaymentAmount} */
 	public PaymentAmount(@NotNull String str){
 		String[] arr=str.split(":");
 		String amountStr;

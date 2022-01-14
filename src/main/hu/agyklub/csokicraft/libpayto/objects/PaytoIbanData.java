@@ -4,10 +4,20 @@ import java.net.URI;
 
 import javax.validation.constraints.NotNull;
 
+/**
+  * Data contained in <code>payto://iban/</code> URIs.
+  */
 public class PaytoIbanData extends AbstractPaytoBicData{
+	/** The IBAN number for the target account. May not be <code>null</code>. */
 	@NotNull
 	public String iban;
 
+	/** Parses the {@link URI} for payment details.
+	  * Extracts the targeted BIC (if any), IBAN, as well as common payment details.
+	  * @see AbstractPaytoData#AbstractPaytoData(URI)
+	  * @throws IllegalArgumentException if the URI is not of the form <code>payto://iban/&lt;bic&gt;/&lt;iban&gt;</code> or <code>payto://iban/&lt;iban&gt;</code>
+	  * @throws NullPointerException if the URI doesn't have a path
+	  */
 	public PaytoIbanData(@NotNull URI uri){
 		super(uri);
 		String path=uri.getRawPath();
@@ -24,6 +34,7 @@ public class PaytoIbanData extends AbstractPaytoBicData{
 		}else throw new NullPointerException("No URI path given!");
 	}
 
+	/** @return the URI represented by this object */
 	@NotNull
 	@Override
 	public String toString(){

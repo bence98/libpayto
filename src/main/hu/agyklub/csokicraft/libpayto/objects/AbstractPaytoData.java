@@ -5,10 +5,17 @@ import java.net.URLEncoder;
 
 import javax.validation.constraints.NotNull;
 
+/**
+  * Abstract base class for other data classes. Contains common parameters (section 5. Generic Options in RFC 8905) for all payment target types.
+  */
 public abstract class AbstractPaytoData{
+	/** The amount of funds to transfer */
 	public PaymentAmount amount;
 	public String receiver_name, sender_name, message, instruction;
 
+	/** Parses the {@link URI} for payment details.
+	  * Extracts common parameters from the query segment of the URI.
+	  */
 	public AbstractPaytoData(@NotNull URI uri){
 		String query=uri.getQuery();
 		if(query!=null){
@@ -48,6 +55,7 @@ public abstract class AbstractPaytoData{
 		}
 	}
 
+	/** @return the query URI segment represented by this object */
 	@NotNull
 	@Override
 	public String toString(){
