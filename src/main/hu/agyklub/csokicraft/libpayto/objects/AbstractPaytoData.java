@@ -3,11 +3,13 @@ package hu.agyklub.csokicraft.libpayto.objects;
 import java.net.URI;
 import java.net.URLEncoder;
 
+import javax.validation.constraints.NotNull;
+
 public abstract class AbstractPaytoData{
 	public PaymentAmount amount;
 	public String receiver_name, sender_name, message, instruction;
 
-	public AbstractPaytoData(URI uri){
+	public AbstractPaytoData(@NotNull URI uri){
 		String query=uri.getQuery();
 		if(query!=null){
 			for(String q:query.split("&")){
@@ -46,6 +48,7 @@ public abstract class AbstractPaytoData{
 		}
 	}
 
+	@NotNull
 	@Override
 	public String toString(){
 		StringBuilder sb=new StringBuilder();

@@ -2,12 +2,14 @@ package hu.agyklub.csokicraft.libpayto;
 
 import java.net.URI;
 
+import javax.validation.constraints.NotNull;
+
 import hu.agyklub.csokicraft.libpayto.objects.AbstractPaytoData;
 import hu.agyklub.csokicraft.libpayto.objects.PaytoBicData;
 import hu.agyklub.csokicraft.libpayto.objects.PaytoIbanData;
 
 public final class LibPayto{
-	public static AbstractPaytoData parseURI(URI uri){
+	public static AbstractPaytoData parseURI(@NotNull URI uri){
 		switch(uri.getRawAuthority()){
 			case "bic":
 				return new PaytoBicData(uri);
@@ -17,7 +19,7 @@ public final class LibPayto{
 		throw new UnsupportedOperationException(String.format("Payment target type %s not supported yet!", uri.getRawAuthority()));
 	}
 
-	public static void dispatchURI(URI uri){
+	public static void dispatchURI(@NotNull URI uri){
 		AbstractPaytoData data=parseURI(uri);
 		if(data instanceof PaytoIbanData)
 			PaytoHandlerRegistry.INSTANCE.dispatch((PaytoIbanData) data);

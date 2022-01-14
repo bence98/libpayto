@@ -2,10 +2,13 @@ package hu.agyklub.csokicraft.libpayto.objects;
 
 import java.net.URI;
 
+import javax.validation.constraints.NotNull;
+
 public class PaytoIbanData extends AbstractPaytoBicData{
+	@NotNull
 	public String iban;
 
-	public PaytoIbanData(URI uri){
+	public PaytoIbanData(@NotNull URI uri){
 		super(uri);
 		String path=uri.getRawPath();
 		if(path!=null){
@@ -21,6 +24,7 @@ public class PaytoIbanData extends AbstractPaytoBicData{
 		}else throw new NullPointerException("No URI path given!");
 	}
 
+	@NotNull
 	@Override
 	public String toString(){
 		StringBuilder sb=new StringBuilder("payto://iban/");

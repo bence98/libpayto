@@ -3,6 +3,8 @@ package hu.agyklub.csokicraft.libpayto;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import hu.agyklub.csokicraft.libpayto.handlers.PaytoBicHandler;
 import hu.agyklub.csokicraft.libpayto.handlers.PaytoIbanHandler;
 import hu.agyklub.csokicraft.libpayto.objects.PaytoBicData;
@@ -15,13 +17,13 @@ public final class PaytoHandlerRegistry{
 
 	protected PaytoHandlerRegistry(){}
 
-	public void register(PaytoIbanHandler handler){
+	public void register(@NotNull PaytoIbanHandler handler){
 		synchronized(ibanHandlers){
 			ibanHandlers.add(handler);
 		}
 	}
 
-	public void register(PaytoBicHandler handler){
+	public void register(@NotNull PaytoBicHandler handler){
 		synchronized(bicHandlers){
 			bicHandlers.add(handler);
 		}
