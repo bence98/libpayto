@@ -1,7 +1,9 @@
 package hu.agyklub.csokicraft.libpayto.objects;
 
 import java.net.URI;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import javax.validation.constraints.NotNull;
 
@@ -17,7 +19,7 @@ public abstract class AbstractPaytoData{
 	  * Extracts common parameters from the query segment of the URI.
 	  */
 	public AbstractPaytoData(@NotNull URI uri){
-		String query=uri.getQuery();
+		String query=uri.getRawQuery();
 		if(query!=null){
 			for(String q:query.split("&")){
 				String[] kv=q.split("=");
@@ -25,21 +27,22 @@ public abstract class AbstractPaytoData{
 					// illegal query param
 					throw new IllegalArgumentException(String.format("Illegal query param: %s", q));
 				}
+				String val=URLDecoder.decode(kv[1], StandardCharsets.UTF_8);
 				switch(kv[0]){
 					case "amount":
-						amount=new PaymentAmount(kv[1]);
+						amount=new PaymentAmount(val);
 						break;
 					case "receiver-name":
-						receiver_name=kv[1];
+						receiver_name=val;
 						break;
 					case "sender-name":
-						sender_name=kv[1];
+						sender_name=val;
 						break;
 					case "message":
-						message=kv[1];
+						message=val;
 						break;
 					case "instruction":
-						instruction=kv[1];
+						instruction=val;
 						break;
 				}
 			}
@@ -51,7 +54,7 @@ public abstract class AbstractPaytoData{
 			if(sb.length()>0)
 				sb.append('&');
 			sb.append(label);
-			sb.append(URLEncoder.encode(str));
+			sb.append(URLEncoder.encode(str, StandardCharsets.UTF_8));
 		}
 	}
 
