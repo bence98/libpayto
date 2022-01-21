@@ -4,6 +4,8 @@ import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 
@@ -14,6 +16,7 @@ public abstract class AbstractPaytoData{
 	/** The amount of funds to transfer */
 	public PaymentAmount amount;
 	public String receiver_name, sender_name, message, instruction;
+	public Map<String, String> otherParams=new HashMap<>();
 
 	/** Parses the {@link URI} for payment details.
 	  * Extracts common parameters from the query segment of the URI.
@@ -44,6 +47,8 @@ public abstract class AbstractPaytoData{
 					case "instruction":
 						instruction=val;
 						break;
+					default:
+						otherParams.put(kv[0], val);
 				}
 			}
 		}
@@ -71,6 +76,7 @@ public abstract class AbstractPaytoData{
 		addPart(sender_name, "sender-name=", sb);
 		addPart(message, "message=", sb);
 		addPart(instruction, "instruction=", sb);
+		otherParams.forEach((k, v)->{addPart(v, k+"=", sb);});
 		return sb.toString();
 	}
 }
