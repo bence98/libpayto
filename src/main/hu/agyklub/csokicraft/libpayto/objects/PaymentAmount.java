@@ -1,5 +1,7 @@
 package hu.agyklub.csokicraft.libpayto.objects;
 
+import java.util.regex.Pattern;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -9,6 +11,10 @@ import javax.validation.constraints.NotNull;
   * Stored as a currency code plus a fix-point value, with 8 decimal places after the point. 
   */
 public class PaymentAmount{
+	/** A regex for determining whether a string is a valid amount string.
+	  * This matches only the part after the colon. Commas need to be stripped beforehand.
+	  */
+	private static Pattern amountRegex=Pattern.compile("\\+?\\d*(?:\\.\\d{0,8})?");
 	/** Identifier of the currency to be used for the transaction.
 	  * May be an arbitrary {@link String}, but is most often 3 characters long.<br />
 	  *
@@ -37,12 +43,16 @@ public class PaymentAmount{
 		String amountStr;
 		if(arr.length>1){
 			currency=arr[0];
+			if(currency.isEmpty())
+				throw new IllegalArgumentException("Currency may not be empty string!");
 			amountStr=arr[1];
 		}else{
 			// nonstandard, use native currency
 			amountStr=arr[0];
 		}
 		amountStr=amountStr.replace(",", "");
+		if(!amountRegex.matcher(amountStr).matches())
+			throw new IllegalArgumentException(String.format("%s is not a valid positive fixpoint value! (from '%s')", amountStr, str));
 
 		String[] amountArr=amountStr.split("\\.");
 		units=Long.parseLong(amountArr[0]);
