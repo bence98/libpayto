@@ -10,11 +10,12 @@ import javax.validation.constraints.NotNull;
   * Payment data describing the amount of funds to be transferred.
   * Stored as a currency code plus a fix-point value, with 8 decimal places after the point. 
   */
-public class PaymentAmount{
+public class PaymentAmount implements Comparable<PaymentAmount>{
 	/** A regex for determining whether a string is a valid amount string.
 	  * This matches only the part after the colon. Commas need to be stripped beforehand.
 	  */
 	private static Pattern amountRegex=Pattern.compile("\\+?\\d*(?:\\.\\d{0,8})?");
+
 	/** Identifier of the currency to be used for the transaction.
 	  * May be an arbitrary {@link String}, but is most often 3 characters long.<br />
 	  *
@@ -65,9 +66,85 @@ public class PaymentAmount{
 		}
 	}
 
+	/** Create a copy of the {@link PaymentAmount} */
+	public PaymentAmount(PaymentAmount val){
+		currency=val.currency;
+		units=val.units;
+		microcents=val.microcents;
+	}
+
 	@NotNull
 	@Override
 	public String toString(){
 		return String.format("%s:%d.%08d", currency, units, microcents);
+	}
+
+	/** Check if a {@link PaymentAmount}'s currency is the same as this one's.
+	  * Attempting to do operations on {@link PaymentAmount}s of different currencies
+	  * will result in an {@link IllegalArgumentException}.
+	  * @return true if both currencies are equal (or null)
+	  */
+	public boolean areCurrenciesEqual(PaymentAmount val){
+		if(currency!=null)
+			return currency.equals(val.currency);
+		else
+			return val.currency==null;
+	}
+
+	private void assertEqualCurrencies(PaymentAmount val, String op){
+		if(!areCurrenciesEqual(val))
+			throw new IllegalArgumentException(String.format("Different currencies %s and %s cannot be %s!", currency, val.currency, op));
+	}
+
+	/** Compare two {@link PaymentAmount}s.
+	  * @throws IllegalArgumentException the currencies do not match
+	  */
+	@Override
+	public int compareTo(PaymentAmount val){
+		assertEqualCurrencies(val, "compared");
+		long units_diff=units-val.units;
+		if(units_diff<0)
+			return -1;
+		else if(units_diff>0)
+			return +1;
+		return microcents-val.microcents;
+	}
+
+	@Override
+	public boolean equals(Object obj){
+		if(!(obj instanceof PaymentAmount))
+			return false;
+		return compareTo((PaymentAmount) obj)==0;
+	}
+
+	/** Add a {@link PaymentAmount} and this value.
+	  * Does not modify the original object.
+	  * @throws IllegalArgumentException the currencies do not match
+	  * @return the sum of the two values
+	  */
+	public PaymentAmount add(PaymentAmount val){
+		assertEqualCurrencies(val, "added");
+		PaymentAmount ret=new PaymentAmount(this);
+		ret.microcents+=val.microcents;
+		int carry=ret.microcents/100_000_000;
+		ret.microcents%=100_000_000;
+		ret.units+=val.units+carry;
+		return ret;
+	}
+
+	/** Multiply {@link PaymentAmount} by a scalar.
+	  * Does not modify the original object.
+	  * @return the product
+	  */
+	public PaymentAmount multiply(int val){
+		if(val<0)
+			throw new IllegalArgumentException("Cannot multiply by negative value!");
+		PaymentAmount ret=new PaymentAmount(this);
+		ret.microcents*=val;
+		int carry=ret.microcents/100_000_000;
+		ret.microcents%=100_000_000;
+		ret.units*=val;
+		ret.units+=carry;
+		return ret;
 	}
 }
