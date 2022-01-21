@@ -8,7 +8,7 @@ import hu.agyklub.csokicraft.libpayto.objects.PaytoIbanData;
 
 public class TestPaytoData{
 	public static void main(String[] args) throws URISyntaxException{
-		URI ibanUri=new URI("payto://iban/DE75512108001245126199?receiver-name=Alice&amount=INR:200"),
+		URI ibanUri=new URI("payto://iban/DE75512108001245126199?receiver-name=Alice&amount=INR:1,200"),
 			ibanUri2=new URI("payto://iban/SOGEDEFFXXX/DE75512108001245126199"),
 			bicUri=new URI("payto://bic/SOGEDEFFXXX?amount=EUR:10.5");
 

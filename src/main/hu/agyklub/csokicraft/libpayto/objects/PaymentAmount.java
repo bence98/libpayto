@@ -42,6 +42,7 @@ public class PaymentAmount{
 			// nonstandard, use native currency
 			amountStr=arr[0];
 		}
+		amountStr=amountStr.replace(",", "");
 
 		String[] amountArr=amountStr.split("\\.");
 		units=Long.parseLong(amountArr[0]);
